@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:open_weather_example_flutter/src/api/api.dart';
-import 'package:open_weather_example_flutter/src/features/weather/data/api_exception.dart';
-import 'package:open_weather_example_flutter/src/features/weather/data/weather_repository.dart';
-import 'package:open_weather_example_flutter/src/features/weather/domain/weather/weather.dart';
+import 'package:weather/src/api/api.dart';
+import 'package:weather/src/features/weather/data/api_exception.dart';
+import 'package:weather/src/features/weather/data/weather_repository.dart';
+import 'package:weather/src/features/weather/domain/weather/weather.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
@@ -73,9 +73,9 @@ void main() {
     final api = OpenWeatherMapAPI('apiKey');
     final weatherRepository =
         HttpWeatherRepository(api: api, client: mockHttpClient);
-    when(() => mockHttpClient.get(api.weather('London'))).thenAnswer(
+    when(() => mockHttpClient.get(api.weather('India'))).thenAnswer(
         (_) => Future.value(http.Response(encodedWeatherJsonResponse, 200)));
-    final weather = await weatherRepository.getWeather(city: 'London');
+    final weather = await weatherRepository.getWeather(city: 'India');
     // expectations
     expect(weather, expectedWeatherFromJson);
   });
@@ -85,10 +85,10 @@ void main() {
     final api = OpenWeatherMapAPI('apiKey');
     final weatherRepository =
         HttpWeatherRepository(api: api, client: mockHttpClient);
-    when(() => mockHttpClient.get(api.weather('London')))
+    when(() => mockHttpClient.get(api.weather('India')))
         .thenAnswer((_) => Future.value(http.Response('{}', 401)));
     // expectations
-    expect(() => weatherRepository.getWeather(city: 'London'),
+    expect(() => weatherRepository.getWeather(city: 'India'),
         throwsA(isA<APIException>()));
   });
 }
